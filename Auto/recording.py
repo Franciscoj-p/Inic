@@ -1,3 +1,4 @@
+import threading
 from pynput import mouse, keyboard
 import ui
 
@@ -14,20 +15,27 @@ keyboard_listener = None
 left_button_pressed = False
 right_button_pressed = False
 last_position = None
+moving = False
 
 # Funciones para manejar los eventos del mouse
 def on_move(x, y):
-    global last_position
-    if left_button_pressed and last_position is not None:
-        event = f"Left mouse dragged from {last_position} to ({x}, {y})"
-        mouse_events.append(event)
-        all_events.append(event)
-        print(event)  # Imprimir en la consola
-    if right_button_pressed and last_position is not None:
-        event = f"Right mouse dragged from {last_position} to ({x}, {y})"
-        mouse_events.append(event)
-        all_events.append(event)
-        print(event)  # Imprimir en la consola
+    global last_position, moving
+    if last_position is not None:
+        if left_button_pressed:
+            event = f"Left mouse dragged from {last_position} to ({x}, {y})"
+            mouse_events.append(event)
+            all_events.append(event)
+            print(event)  # Imprimir en la consola
+        elif right_button_pressed:
+            event = f"Right mouse dragged from {last_position} to ({x}, {y})"
+            mouse_events.append(event)
+            all_events.append(event)
+            print(event)  # Imprimir en la consola
+        elif not left_button_pressed and not right_button_pressed:  # Movimiento simple
+            event = f"Mouse moved to ({x}, {y})"
+            mouse_events.append(event)
+            all_events.append(event)
+            print(event)  # Imprimir en la consola
     last_position = (x, y)
 
 def on_click(x, y, button, pressed):
@@ -78,16 +86,22 @@ def on_release(key):
 
 # Funciones para iniciar y detener los listeners
 def start_listeners():
-    global mouse_listener, keyboard_listener
-    # Crear y iniciar los listeners
+    all_events.clear()
+    global mouse_listener, keyboard_listener, is_first_start
+    # Crear y comenzar los listeners
     mouse_listener = mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll)
     keyboard_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
     mouse_listener.start()
     keyboard_listener.start()
 
+    print("Listeners iniciados.")
+
+    # Después de la primera ejecución, cambiamos el flag para que las siguientes veces se sincronicen
+    is_first_start = False  # Aseguramos que después de la primera ejecución, no se espere
+
 def stop_listeners():
-    global mouse_listener, keyboard_listener
+    global mouse_listener, keyboard_listener, all_events
     if mouse_listener is not None:
         mouse_listener.stop()
     if keyboard_listener is not None:
