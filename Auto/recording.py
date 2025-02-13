@@ -1,6 +1,7 @@
 import threading
 from pynput import mouse, keyboard
 import ui
+from pynput.mouse import Listener, Button
 
 # Arreglos para almacenar los eventos
 mouse_events = []
@@ -17,57 +18,54 @@ right_button_pressed = False
 last_position = None
 moving = False
 
-# Funciones para manejar los eventos del mouse
-def on_move(x, y):
-    global last_position, moving
-    if last_position is not None:
-        if left_button_pressed:
-            event = f"Left mouse dragged from {last_position} to ({x}, {y})"
-            mouse_events.append(event)
-            all_events.append(event)
-            print(event)  # Imprimir en la consola
-        elif right_button_pressed:
-            event = f"Right mouse dragged from {last_position} to ({x}, {y})"
-            mouse_events.append(event)
-            all_events.append(event)
-            print(event)  # Imprimir en la consola
-        elif not left_button_pressed and not right_button_pressed:  # Movimiento simple
-            event = f"Mouse moved to ({x}, {y})"
-            mouse_events.append(event)
-            all_events.append(event)
-            print(event)  # Imprimir en la consola
-    last_position = (x, y)
-
+# Función para manejar el movimiento del mouse
 def on_click(x, y, button, pressed):
-    global left_button_pressed, right_button_pressed
-    if button == mouse.Button.left:
+    global left_button_pressed, right_button_pressed, last_position
+
+    event = None  # Inicializar variable de evento
+
+    if button == Button.left:
         if pressed:
+            # Guardamos el "from" cuando se presiona el botón izquierdo
             left_button_pressed = True
-            event = f"Left mouse clicked at ({x}, {y})"
+            last_position = (x, y)
         else:
+            # Guardamos el "to" cuando se suelta el botón izquierdo
             left_button_pressed = False
+            if last_position is not None:
+                # Verificar si hubo movimiento para registrar un arrastre
+                if last_position != (x, y):
+                    event = f"Left mouse dragged from {last_position} to ({x}, {y})"
+                else:
+                    # Si no hubo movimiento, solo registra el clic seguido de un relase en el mismo lugar *************
+                    event = f"Left mouse clicked at ({x}, {y})"
             last_position = None  # Resetea la posición cuando se suelta el botón
-            event = f"Left mouse released at ({x}, {y})"
-    elif button == mouse.Button.right:
+        
+    elif button == Button.right:
         if pressed:
+            # Guardamos el "from" cuando se presiona el botón derecho
             right_button_pressed = True
-            event = f"Right mouse clicked at ({x}, {y})"
+            last_position = (x, y)
         else:
+            # Guardamos el "to" cuando se suelta el botón derecho
             right_button_pressed = False
+            if last_position is not None:
+                # Verificar si hubo movimiento para registrar un arrastre
+                if last_position != (x, y):
+                    event = f"Right mouse dragged from {last_position} to ({x}, {y})"
+                else:
+                    # Si no hubo movimiento, solo registra el clic, seguido de un relase en el mismo lugar **********+
+                    event = f"Right mouse clicked at ({x}, {y})"
             last_position = None  # Resetea la posición cuando se suelta el botón
-            event = f"Right mouse released at ({x}, {y})"
+
     else:
         return  # Ignorar otros botones
 
-    mouse_events.append(event)
-    all_events.append(event)
-    print(event)  # Imprimir en la consola
-
-def on_scroll(x, y, dx, dy):
-    event = f"Mouse scrolled at ({x}, {y}) with delta ({dx}, {dy})"
-    mouse_events.append(event)
-    all_events.append(event)
-    print(event)  # Imprimir en la consola
+    # Añadir el evento al registro solo si se generó un evento
+    if event:
+        mouse_events.append(event)
+        all_events.append(event)
+        print(event)  # Imprimir en la consola
 
 # Función para manejar los eventos del teclado
 def on_press(key):
@@ -89,16 +87,13 @@ def start_listeners():
     all_events.clear()
     global mouse_listener, keyboard_listener, is_first_start
     # Crear y comenzar los listeners
-    mouse_listener = mouse.Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll)
+    mouse_listener = mouse.Listener(on_click=on_click)
     keyboard_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
     mouse_listener.start()
     keyboard_listener.start()
 
     print("Listeners iniciados.")
-
-    # Después de la primera ejecución, cambiamos el flag para que las siguientes veces se sincronicen
-    is_first_start = False  # Aseguramos que después de la primera ejecución, no se espere
 
 def stop_listeners():
     global mouse_listener, keyboard_listener, all_events
@@ -113,3 +108,15 @@ def stop_listeners():
             file.write(event + "\n")
     print("Todos los eventos se han guardado en 'all_events.txt'.")
     all_events.clear()
+    
+    with open("mouse_events.txt", "w") as file:
+        for event in mouse_events:
+            file.write(event + "\n")
+    print("Todos los eventos del mouse se han guardado en 'mouse_events.txt'.")
+    mouse_events.clear()
+    
+    with open("keyboard_events.txt", "w") as file:
+        for event in keyboard_events:
+            file.write(event + "\n")
+    print("Todos los eventos del teclado se han guardado en 'keyboard_events.txt'.")
+    keyboard_events.clear()
