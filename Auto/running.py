@@ -7,6 +7,7 @@ from pynput.keyboard import Controller as KeyboardController, Key
 # Variables globales
 velocidad_eventos = 0.05  # Definir la velocidad de los eventos (en segundos)
 keyboard_controller = KeyboardController()
+bucle_infinito = False  # Definir si los eventos deben ejecutarse en bucle infinito
 
 # Función para interpretar y simular los eventos
 def interpretar_eventos():
