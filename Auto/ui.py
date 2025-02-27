@@ -26,11 +26,6 @@ def detener():
 def iniciar_rep():
     print("Iniciando reproducción...")
     
-    # Verificar si el archivo de eventos existe antes de iniciar
-    if not os.path.exists("all_events.txt"):
-        print("Error: El archivo de eventos no existe.")
-        return
-    
     running.bucle_infinito = var_bucle_infinito.get()  # Controla el bucle infinito desde el checkbox
     buttonRep.config(text="Detener Reproducción", command=detener_rep)
     button.config(state=tk.DISABLED)  # Deshabilita el botón de grabación
