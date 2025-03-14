@@ -56,7 +56,6 @@ German Suarez     19     110     201     Moderada Intensidad
 Paso 4: Codificación en C++
 */
 #include <iostream>
-#include <cmath>
 
 using namespace std;
 
