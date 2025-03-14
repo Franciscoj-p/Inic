@@ -22,5 +22,8 @@ Paso 4: Codificación en C++
 
 using namespace std;
 
+int funcion() {
+}
+
 int main() {
 }

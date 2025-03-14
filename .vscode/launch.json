@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/franciscop/Documentos/proyectos/Inic/C++",
-      "program": "/home/franciscop/Documentos/proyectos/Inic/C++/build/Debug/outDebug",
+      "cwd": "/media/franciscop/Dual/proyectos/Inic/C++/lab2",
+      "program": "/media/franciscop/Dual/proyectos/Inic/C++/lab2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
