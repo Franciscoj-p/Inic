@@ -7,9 +7,9 @@
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": false,
-      "cwd": "/media/franciscop/Dual/proyectos/Inic/C++/lab2",
-      "program": "/media/franciscop/Dual/proyectos/Inic/C++/lab2/build/Debug/outDebug",
+      "externalConsole": true,
+      "cwd": "d:/proyectos/Inic/C++/lab3",
+      "program": "d:/proyectos/Inic/C++/lab3/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
