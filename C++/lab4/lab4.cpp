@@ -11,7 +11,18 @@ Descripcion:
 El programa debe calcular el salario de cada empleado, el gasto semanal en nómina y mostrar los empleados que ganan más que el promedio de la empresa. 
 El tamaño de las matrices y vectores debe definirse dinámicamente y el flujo debe ser interactivo a través de un menú.
 Entradas: 
+    n (int): Número de empleados.
+    m (int): Número de semanas.
+    nombres (vector<string>): Nombres de los empleados.
+    horas (vector<vector<int>>): Horas trabajadas por cada empleado en cada semana.
+    opcion (int): Opción del menú (1 a 4). 
+
 Salidas: 
+    salarios (vector<int>): Salario total de cada empleado.
+    gastos (vector<int>): Gasto semanal en nómina.
+    promedio (double): Promedio de salarios de la empresa.
+    empleadosSobrePromedio (vector<string>): Empleados que ganan más que el promedio.
+
 
 Paso 2: Pseudocódigo
 Inicio
@@ -103,7 +114,15 @@ Inicio
 Fin
 
 Paso 3: Pruebas de escritorio
-
+1
+    cantidad empleados || cantidad semanas || nombres empleados || horas trabajadas || opcion || salario personal || gasto semanal || opcion ||
+            1          ||     1            ||      Juan         ||       1          || 1      ||      10000       ||      10000     ||   4   ||                     
+2
+    cantidad empleados || cantidad semanas || nombres empleados || horas trabajadas sem1 || horas trabajadas sem2 || opcion  || gasto semana1 || gasto sem2  || total nomina || opcion ||
+            2          ||     2            ||    Juan - Maria   ||          3-4          ||         2-3           ||   2    ||     70000      ||   50000      ||   120000    ||   4    ||              
+3
+    cantidad empleados || cantidad semanas ||    nombres empleados     || horas trabajadas sem1 ||  horas trabajadas sem2  || opcion || promedio nomina || empleados que ganan mas || opcion ||       
+            3          ||     2            ||    Juan - Maria - pedro  ||         3-4-7         ||         2-3-5           ||   3    ||     80000       ||      Pedro $120000      ||   4    ||
 
 Paso 4: Codificación en C++
 */
